@@ -198,7 +198,7 @@ public class OneSmallFavour extends BasicQuestHelper
 		fightSlagilith.addStep(slagilithNearby, killSlagilith);
 		fightSlagilith.addStep(inScrollSpot, readScroll);
 		fightSlagilith.addStep(inGoblinCave, standNextToSculpture);
-		fightSlagilith.addStep(pigeonCages5.alsoCheckBank(questBank), enterGoblinCaveAgain);
+		fightSlagilith.addStep(pigeonCages5.alsoCheckBank(), enterGoblinCaveAgain);
 
 		steps.put(145, fightSlagilith);
 		steps.put(150, fightSlagilith);
@@ -207,7 +207,7 @@ public class OneSmallFavour extends BasicQuestHelper
 		freePetra.addStep(petraNearby, talkToPetra);
 		freePetra.addStep(inScrollSpot, readScroll);
 		freePetra.addStep(inGoblinCave, standNextToSculpture);
-		freePetra.addStep(pigeonCages5.alsoCheckBank(questBank), enterGoblinCaveAgain);
+		freePetra.addStep(pigeonCages5.alsoCheckBank(), enterGoblinCaveAgain);
 
 		steps.put(152, freePetra);
 		steps.put(155, freePetra);
@@ -501,9 +501,9 @@ public class OneSmallFavour extends BasicQuestHelper
 		addedDirectionals = new VarbitRequirement(VarbitID.DIRECTIONALSFIXED, 1);
 		addedWeathervanePillar = new VarbitRequirement(VarbitID.ROTATINGPILLARFIXED, 1);
 
-		hasOrUsedDirectionals = new Conditions(LogicType.OR, addedDirectionals, directionals.alsoCheckBank(questBank));
-		hasOrUsedOrnament = new Conditions(LogicType.OR, addedOrnaments, ornament.alsoCheckBank(questBank));
-		hasOrUsedWeathervanePillar = new Conditions(LogicType.OR, addedWeathervanePillar, weathervanePillar.alsoCheckBank(questBank));
+		hasOrUsedDirectionals = new Conditions(LogicType.OR, addedDirectionals, directionals.alsoCheckBank());
+		hasOrUsedOrnament = new Conditions(LogicType.OR, addedOrnaments, ornament.alsoCheckBank());
+		hasOrUsedWeathervanePillar = new Conditions(LogicType.OR, addedWeathervanePillar, weathervanePillar.alsoCheckBank());
 	}
 
 	public void setupSteps()
@@ -511,7 +511,7 @@ public class OneSmallFavour extends BasicQuestHelper
 		talkToYanni = new NpcStep(this, NpcID.SHILOANTIQUES, new WorldPoint(2836, 2983, 0), "Talk to Yanni Salika in Shilo Village. CKR fairy ring or take cart from Brimhaven.");
 		talkToYanni.addDialogStep("Yes.");
 		talkToYanni.addDialogSteps("Is there anything else interesting to do around here?", "Ok, see you in a tick!");
-		talkToJungleForester = new NpcStep(this, new int[]{NpcID.JUNGLEFORESTER_F, NpcID.JUNGLEFORESTER_M}, new WorldPoint(2861, 2942, 0), "Talk to a Jungle Forester south of Shilo Village.", true, bluntAxe);
+		talkToJungleForester = new NpcStep(this, new int[]{NpcID.JUNGLEFORESTER_F, NpcID.JUNGLEFORESTER_M}, new WorldPoint(2861, 2942, 0), "Talk to a Jungle Forester south of Shilo Village.", true);
 		talkToJungleForester.addDialogSteps("I'll get going then!", "I need to talk to you about red mahogany.");
 		talkToJungleForester.addDialogStep("Okay, I'll take your axe to get it sharpened.");
 		talkToBrian = new NpcStep(this, NpcID.BRIAN, new WorldPoint(3027, 3249, 0), "Talk to Brian in the Port Sarim axe shop.", bluntAxe);

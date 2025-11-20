@@ -273,7 +273,6 @@ import com.questhelper.helpers.skills.mining.Mining;
 import com.questhelper.helpers.skills.woodcutting.Woodcutting;
 import com.questhelper.helpers.skills.woodcutting.WoodcuttingMember;
 import com.questhelper.playerquests.bikeshedder.BikeShedder;
-import com.questhelper.playerquests.cookshelper.CooksHelper;
 import com.questhelper.questhelpers.QuestDetails;
 import com.questhelper.questhelpers.QuestHelper;
 import lombok.Getter;
@@ -472,7 +471,7 @@ public enum QuestHelperQuest
 	THE_HEART_OF_DARKNESS(new TheHeartOfDarkness(), Quest.THE_HEART_OF_DARKNESS, QuestVarbits.QUEST_THE_HEART_OF_DARKNESS, QuestDetails.Type.P2P, QuestDetails.Difficulty.EXPERIENCED),
 	THE_CURSE_OF_ARRAV(new TheCurseOfArrav(), Quest.THE_CURSE_OF_ARRAV, QuestVarbits.QUEST_THE_CURSE_OF_ARRAV, QuestDetails.Type.P2P, QuestDetails.Difficulty.MASTER),
 	THE_FINAL_DAWN(new TheFinalDawn(), Quest.THE_FINAL_DAWN, QuestVarbits.QUEST_THE_FINAL_DAWN, QuestDetails.Type.P2P, QuestDetails.Difficulty.MASTER),
-	SHADOWS_OF_CUSTODIA(new ShadowsOfCustodia(), Quest.SHADOWS_OF_CUSTODIA, QuestVarbits.QUEST_SHADOWS_OF_CUSTODIA, QuestDetails.Type.P2P, QuestDetails.Difficulty.MASTER /* TODO: CONFIRM DIFFICULTY */),
+	SHADOWS_OF_CUSTODIA(new ShadowsOfCustodia(), Quest.SHADOWS_OF_CUSTODIA, QuestVarbits.QUEST_SHADOWS_OF_CUSTODIA, QuestDetails.Type.P2P, QuestDetails.Difficulty.EXPERIENCED),
 	SCRAMBLED(new Scrambled(), Quest.SCRAMBLED, QuestVarbits.QUEST_SCRAMBLED, QuestDetails.Type.P2P, QuestDetails.Difficulty.INTERMEDIATE),
 
 	//Miniquests
@@ -652,7 +651,6 @@ public enum QuestHelperQuest
 	MINING(new Mining(), "Mining", Skill.MINING, 99, QuestDetails.Type.SKILL_F2P, QuestDetails.Difficulty.SKILL),
 
 	// Player Quests
-	COOKS_HELPER(new CooksHelper(), "Cook's Helper", PlayerQuests.COOKS_HELPER, 4, false),
 	BIKE_SHEDDER(new BikeShedder(), "Bike Shedder", PlayerQuests.BIKE_SHEDDER, 4, true);
 
 	@Getter

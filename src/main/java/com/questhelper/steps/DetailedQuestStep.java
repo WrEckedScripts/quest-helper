@@ -28,7 +28,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.inject.Inject;
 import com.questhelper.QuestHelperPlugin;
-import com.questhelper.bank.QuestBank;
 import com.questhelper.questhelpers.QuestHelper;
 import com.questhelper.requirements.Requirement;
 import com.questhelper.requirements.item.ItemRequirement;
@@ -77,9 +76,6 @@ public class DetailedQuestStep extends QuestStep
 
 	@Inject
 	EventBus eventBus;
-
-	@Inject
-	private QuestBank questBank;
 
 	@Getter
 	protected WorldPoint worldPoint;
@@ -310,7 +306,7 @@ public class DetailedQuestStep extends QuestStep
 			OverlayUtil.renderPolygon(graphics, zonePoly, questHelper.getConfig().targetOverlayColor());
 		}
 
-		tileHighlights.keySet().forEach(tile -> checkAllTilesForHighlighting(tile, tileHighlights.get(tile), graphics));
+		tileHighlights.keySet().forEach(tile -> checkAllTilesForItemHighlighting(tile, tileHighlights.get(tile), graphics));
 		renderTileIcon(graphics);
 	}
 
@@ -666,7 +662,7 @@ public class DetailedQuestStep extends QuestStep
 		return ids.stream().anyMatch(id -> requirementContainsID(requirement, id));
 	}
 
-	private void checkAllTilesForHighlighting(Tile tile, Collection<Integer> ids, Graphics2D graphics)
+	private void checkAllTilesForItemHighlighting(Tile tile, Collection<Integer> ids, Graphics2D graphics)
 	{
 		if (inCutscene)
 		{
@@ -689,12 +685,20 @@ public class DetailedQuestStep extends QuestStep
 				return;
 			}
 
-			if (location.distanceTo(playerLocation) > MAX_DISTANCE)
+			var tileWp = tile.getWorldLocation();
+			if (tileWp == null || tileWp.getPlane() != player.getWorldLocation().getPlane())
 			{
 				return;
 			}
 
-			Polygon poly = Perspective.getCanvasTilePoly(client, location);
+
+			if (location.distanceTo(playerLocation) > MAX_DISTANCE)
+			{
+				return;
+			}
+			final int zOffset = tile.getItemLayer().getHeight();
+			final Polygon poly = Perspective.getCanvasTilePoly(client, location, zOffset);
+			final Point imgPoint = Perspective.getCanvasImageLocation(client, location, icon, zOffset);
 			if (poly == null)
 			{
 				return;
@@ -704,13 +708,13 @@ public class DetailedQuestStep extends QuestStep
 
 			for (Requirement requirement : requirements)
 			{
-				if (isReqValidForHighlighting(requirement, ids))
+				if (isReqValidForItemHighlighting(requirement, ids))
 				{
 					if (iconToUseForNeededItems != -1)
 					{
 						BufferedImage icon = spriteManager.getSprite(iconToUseForNeededItems, 0);
-
-						OverlayUtil.renderTileOverlay(client, graphics, location, icon, questHelper.getConfig().targetOverlayColor());
+						OverlayUtil.renderPolygon(graphics, poly, questHelper.getConfig().targetOverlayColor());
+						OverlayUtil.renderImageLocation(graphics, imgPoint, icon);
 
 					}
 					else
@@ -743,7 +747,7 @@ public class DetailedQuestStep extends QuestStep
 		}
 	}
 
-	private boolean isReqValidForHighlighting(Requirement requirement, Collection<Integer> ids)
+	private boolean isReqValidForItemHighlighting(Requirement requirement, Collection<Integer> ids)
 	{
 		return isItemRequirement(requirement)
 			&& requirementIsItem((ItemRequirement) requirement)

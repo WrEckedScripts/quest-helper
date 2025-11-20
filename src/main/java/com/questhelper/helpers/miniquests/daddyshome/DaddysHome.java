@@ -136,7 +136,7 @@ public class DaddysHome extends BasicQuestHelper
 		needToRemoveChair = new VarbitRequirement(VarbitID.DADDYSHOME_CHAIR, 2, Operation.LESS);
 		needToRemoveStool2 = new VarbitRequirement(VarbitID.DADDYSHOME_STOOL_1, 2, Operation.LESS);
 		needToRemoveTable2 = new VarbitRequirement(VarbitID.DADDYSHOME_TABLE_1, 2, Operation.LESS);
-		needToRemoveAnyFurniture = or(needToRemoveCampbed, needToRemoveCarpet, needToRemoveStool, needToRemoveTable, needToRemoveChair, needToRemoveStool2);
+		needToRemoveAnyFurniture = or(needToRemoveCampbed, needToRemoveCarpet, needToRemoveStool, needToRemoveTable, needToRemoveChair, needToRemoveStool2, needToRemoveTable2);
 
 		needToBuildCarpet = new VarbitRequirement(VarbitID.DADDYSHOME_CARPET, 3, Operation.LESS);
 		needToBuildStool = new VarbitRequirement(VarbitID.DADDYSHOME_STOOL_2, 3, Operation.LESS);
@@ -251,8 +251,8 @@ public class DaddysHome extends BasicQuestHelper
 
 		var cRepairFurniture = new ConditionalStep(this, talkToYarloAfterBuildingFurniture);
 		cRepairFurniture.addStep(needToBuildSimpleFurniture, buildSimpleFurniture);
-		cRepairFurniture.addStep(and(needToBuildCampbed, waxwoodPlank3.alsoCheckBank(questBank)), buildCampbed);
-		cRepairFurniture.addStep(and(needToBuildCampbed, waxwoodLog3.alsoCheckBank(questBank)), talkToOperator);
+		cRepairFurniture.addStep(and(needToBuildCampbed, waxwoodPlank3.alsoCheckBank()), buildCampbed);
+		cRepairFurniture.addStep(and(needToBuildCampbed, waxwoodLog3.alsoCheckBank()), talkToOperator);
 		cRepairFurniture.addStep(needToBuildCampbed, searchCrate);
 
 		steps.put(5, cRepairFurniture);

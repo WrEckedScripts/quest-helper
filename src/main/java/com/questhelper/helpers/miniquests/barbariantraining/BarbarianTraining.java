@@ -117,7 +117,7 @@ public class BarbarianTraining extends BasicQuestHelper
 		// Fishing
 		fishingSteps = new ConditionalStep(this, talkToOttoAboutFishing);
 		fishingSteps.addStep(caughtBarbarianFish, talkToOttoAfterFish);
-		fishingSteps.addStep(and(taskedWithFishing, barbFishingRod.alsoCheckBank(questBank)), catchFish);
+		fishingSteps.addStep(and(taskedWithFishing, barbFishingRod.alsoCheckBank()), catchFish);
 		fishingSteps.addStep(taskedWithFishing, searchBed);
 		fishingSteps.setLockingCondition(finishedFishing);
 
@@ -126,7 +126,7 @@ public class BarbarianTraining extends BasicQuestHelper
 		herbloreSteps.addStep(madePotion, talkToOttoAfterPotion);
 		herbloreSteps.addStep(and(taskedWithHerblore, roe), useRoeOnAttackPotion);
 		herbloreSteps.addStep(and(taskedWithHerblore, fish), dissectFish);
-		herbloreSteps.addStep(and(taskedWithHerblore, barbFishingRod.alsoCheckBank(questBank)), fishForHerblore);
+		herbloreSteps.addStep(and(taskedWithHerblore, barbFishingRod.alsoCheckBank()), fishForHerblore);
 		herbloreSteps.addStep(taskedWithHerblore, getBarbRodForHerblore);
 		herbloreSteps.setLockingCondition(finishedHerblore);
 
@@ -157,7 +157,7 @@ public class BarbarianTraining extends BasicQuestHelper
 
 		pyreSteps = new ConditionalStep(this, talkToOttoAboutPyre);
 		pyreSteps.addStep(and(sacrificedRemains), talkToOttoAfterPyre);
-		pyreSteps.addStep(and(taskedWithPyre, chewedBones.alsoCheckBank(questBank)), useLogOnPyre);
+		pyreSteps.addStep(and(taskedWithPyre, chewedBones.alsoCheckBank()), useLogOnPyre);
 		pyreSteps.addStep(and(taskedWithPyre, chewedBonesNearby), pickupChewedBones);
 		pyreSteps.addStep(and(taskedWithPyre, inAncientCavernArrivalRoom), enterWhirlpool);
 		pyreSteps.addStep(and(taskedWithPyre, inAncientCavernF0), goUpToMithrilDragons);
@@ -631,7 +631,7 @@ public class BarbarianTraining extends BasicQuestHelper
 		talkToOttoAboutHastae.addDialogStep("Tell me more about the use of spears.");
 		makeBronzeHasta = new ObjectStep(this, ObjectID.BRUT_ANVIL, new WorldPoint(2502, 3485, 0),
 			"Make a bronze hasta on the anvil south of Otto.", bronzeBar, logs, hammer);
-		makeBronzeHasta.addWidgetHighlightWithItemIdRequirement(270, 15, 11421, true);
+		makeBronzeHasta.addWidgetHighlightWithItemIdRequirement(270, 15, ItemID.BRUT_BRONZE_SPEAR_DUMMY, true);
 		talkToOttoAfterMakingHasta = new NpcStep(this, NpcID.BRUT_OTTO, new WorldPoint(2500, 3488, 0),
 			"Talk to Otto in his hut north-west of Baxtorian Falls.");
 		talkToOttoAfterMakingHasta.addDialogStep("I've created a hasta!");

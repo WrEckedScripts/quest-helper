@@ -120,8 +120,8 @@ public class RFDPiratePete extends BasicQuestHelper
 
 		ConditionalStep goLearnHowToMakeFishCake = new ConditionalStep(this, goDivingAgain);
 		goLearnHowToMakeFishCake.addStep(new Conditions(fishCake, inDiningRoom), useCakeOnPete);
-		goLearnHowToMakeFishCake.addStep(new Conditions(fishCake.alsoCheckBank(questBank)), enterDiningRoomAgain);
-		goLearnHowToMakeFishCake.addStep(new Conditions(rawFishCake.alsoCheckBank(questBank)), cookCake);
+		goLearnHowToMakeFishCake.addStep(new Conditions(fishCake.alsoCheckBank()), enterDiningRoomAgain);
+		goLearnHowToMakeFishCake.addStep(new Conditions(rawFishCake.alsoCheckBank()), cookCake);
 		goLearnHowToMakeFishCake.addStep(new Conditions(hasKelp, hasCrabMeat, inUnderWater), climbAnchor);
 		goLearnHowToMakeFishCake.addStep(new Conditions(hasKelp, inUnderWater, hasEnoughRocks), killCrab);
 		goLearnHowToMakeFishCake.addStep(new Conditions(hasKelp, inUnderWater), pickUpRocksAgain);
@@ -136,7 +136,7 @@ public class RFDPiratePete extends BasicQuestHelper
 
 		ConditionalStep savePete = new ConditionalStep(this, useCrabOnKelp);
 		savePete.addStep(new Conditions(fishCake, inDiningRoom), useCakeOnPete);
-		savePete.addStep(new Conditions(fishCake.alsoCheckBank(questBank)), enterDiningRoomAgain);
+		savePete.addStep(new Conditions(fishCake.alsoCheckBank()), enterDiningRoomAgain);
 		savePete.addStep(new Conditions(rawFishCake), cookCake);
 		steps.put(100, savePete);
 
@@ -258,7 +258,7 @@ public class RFDPiratePete extends BasicQuestHelper
 		grindKelp = new DetailedQuestStep(this, "Use a pestle and mortar on the kelp.", pestleHighlighted, kelpHighlighted);
 		grindCrab = new DetailedQuestStep(this, "Use a pestle and mortar on the crab.", pestleHighlighted, crabMeatHighlighted);
 		climbAnchor = new ObjectStep(this, ObjectID.ANCHOR_MIDDLE, new WorldPoint(2963, 9477, 1), "Climb the anchor to the south to return to the surface.");
-		talkToCookAgain = new NpcStep(this, NpcID.POH_SERVANT_COOK_WOMAN, new WorldPoint(3209, 3215, 0),
+		talkToCookAgain = new NpcStep(this, NpcID.COOK, new WorldPoint(3209, 3215, 0),
 			"Talk to the Lumbridge Cook about Pirate Pete again.", groundCod, groundCrabMeatHighlighted, groundKelpHighlighted, breadcrumbs);
 		talkToCookAgain.addDialogStep("Protecting the Pirate");
 		useCrabOnKelp = new DetailedQuestStep(this, "Use the ingredients together to make the cake.", groundCrabMeatHighlighted, groundKelpHighlighted, groundCod, breadcrumbs);

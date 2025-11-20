@@ -134,7 +134,7 @@ public class LandOfTheGoblins extends BasicQuestHelper
 		becomeGoblin.addStep(new Conditions(inFrontOfGuardsWithGoblinPotion, blackMushroom), makeBlackDye);
 		becomeGoblin.addStep(inFrontOfGuardsWithGoblinPotion, pickBlackMushrooms);
 		becomeGoblin.addStep(inGoblinCaveWithGoblinPotion, goToGuards);
-		becomeGoblin.addStep(goblinPotion.alsoCheckBank(questBank), goBackToGoblinCave);
+		becomeGoblin.addStep(goblinPotion.alsoCheckBank(), goBackToGoblinCave);
 		becomeGoblin.addStep(pharmakosBerryHighlight, mixGoblinPotion);
 
 		steps.put(16, becomeGoblin);
@@ -333,13 +333,13 @@ public class LandOfTheGoblins extends BasicQuestHelper
 		inGoblinCaveWithZanik = new Conditions(LogicType.AND, inGoblinCave, zanikFollowing);
 		unlockedDoor = new VarbitRequirement(QuestHelperQuest.LAND_OF_THE_GOBLINS.getId(), 36, Operation.GREATER_EQUAL);
 
-		saragorgakKey = new ItemRequirement("Saragorgak key", ItemID.LOTG_KEY_WHITE).alsoCheckBank(questBank);
-		yurkolgokhKey = new ItemRequirement("Yurkolgokh key", ItemID.LOTG_KEY_YELLOW).alsoCheckBank(questBank);
-		ekeleshuunKey = new ItemRequirement("Ekeleshuun key", ItemID.LOTG_KEY_BLUE).alsoCheckBank(questBank);
-		nargoshuunKey = new ItemRequirement("Narogoshuun key", ItemID.LOTG_KEY_ORANGE).alsoCheckBank(questBank);
-		horogothgarKey = new ItemRequirement("Horogothgar key", ItemID.LOTG_KEY_PURPLE).alsoCheckBank(questBank);
+		saragorgakKey = new ItemRequirement("Saragorgak key", ItemID.LOTG_KEY_WHITE).alsoCheckBank();
+		yurkolgokhKey = new ItemRequirement("Yurkolgokh key", ItemID.LOTG_KEY_YELLOW).alsoCheckBank();
+		ekeleshuunKey = new ItemRequirement("Ekeleshuun key", ItemID.LOTG_KEY_BLUE).alsoCheckBank();
+		nargoshuunKey = new ItemRequirement("Narogoshuun key", ItemID.LOTG_KEY_ORANGE).alsoCheckBank();
+		horogothgarKey = new ItemRequirement("Horogothgar key", ItemID.LOTG_KEY_PURPLE).alsoCheckBank();
 
-		huzamogaarbKey = new ItemRequirement("Huzamogaarb key", ItemID.LOTG_KEY_BLACK).alsoCheckBank(questBank);
+		huzamogaarbKey = new ItemRequirement("Huzamogaarb key", ItemID.LOTG_KEY_BLACK).alsoCheckBank();
 
 		// ItemRequirements
 		lightSource = new ItemRequirement("Light source", ItemCollections.LIGHT_SOURCES);
@@ -384,11 +384,11 @@ public class LandOfTheGoblins extends BasicQuestHelper
 		pharmakosBerryHighlight.setHighlightInInventory(true);
 		toadflaxUnfHighlight = new ItemRequirement("Toadflax potion (unf)", ItemID.TOADFLAXVIAL);
 		toadflaxUnfHighlight.setHighlightInInventory(true);
-		goblinPotion = new ItemRequirement("Goblin potion", Arrays.asList(ItemID.LOTG_1DOSEGOBLIN, ItemID.LOTG_2DOSEGOBLIN, ItemID.LOTG_3DOSEGOBLIN));
+		goblinPotion = new ItemRequirement("Goblin potion", Arrays.asList(ItemID.LOTG_1DOSEGOBLIN, ItemID.LOTG_2DOSEGOBLIN, ItemID.LOTG_3DOSEGOBLIN, ItemID.LOTG_4DOSEGOBLIN));
 		goblinPotion.setTooltip("You can make another with a toadflax potion (unf) and some pharmakos berries from the bush outside the Makeover Mage's house");
 		inGoblinCaveWithGoblinPotion = new Conditions(LogicType.AND, inGoblinCave, goblinPotion);
 		inFrontOfGuardsWithGoblinPotion = new Conditions(LogicType.AND, new ZoneRequirement(guardArea), goblinPotion);
-		goblinPotionHighlight = new ItemRequirement("Goblin potion", Arrays.asList(ItemID.LOTG_1DOSEGOBLIN, ItemID.LOTG_2DOSEGOBLIN, ItemID.LOTG_3DOSEGOBLIN));
+		goblinPotionHighlight = new ItemRequirement("Goblin potion", Arrays.asList(ItemID.LOTG_1DOSEGOBLIN, ItemID.LOTG_2DOSEGOBLIN, ItemID.LOTG_3DOSEGOBLIN, ItemID.LOTG_4DOSEGOBLIN));
 		goblinPotionHighlight.setHighlightInInventory(true);
 		goblinSelectionActive = new WidgetPresenceRequirement(InterfaceID.LotgMakeover.CONFIRM);
 		hasBlackMushroomsOrDye = new Conditions(LogicType.OR, blackMushroom, blackDye);

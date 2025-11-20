@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Zoinkwiz
+ * Copyright (c) 2025, Zoinkwiz <https://github.com/Zoinkwiz>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,18 +22,33 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.questhelper.questinfo;
+package com.questhelper.panel;
 
+import com.questhelper.steps.QuestStep;
 import lombok.Getter;
+import java.util.List;
 
-public enum PlayerQuests
+// The intention is to contain a set of PanelDetails.
+// This is intended to be the structure used for containing a reorderable set of PanelDetails
+public class TopLevelPanelDetails extends PanelDetails
 {
-	BIKE_SHEDDER("bike_shedder");
-
-	@Getter
-	private final String configValue;
-	PlayerQuests(String configValue)
+    @Getter
+    private final PanelDetails[] panelDetails;
+	
+    public TopLevelPanelDetails(String header, PanelDetails... panelDetails)
 	{
-		this.configValue = configValue;
+		super(header);
+		this.panelDetails = panelDetails;
+	}
+
+	@Override
+	public boolean contains(QuestStep questStep)
+	{
+		for (PanelDetails panelDetail : panelDetails)
+		{
+			if (panelDetail.contains(questStep)) return true;
+		}
+
+		return false;
 	}
 }

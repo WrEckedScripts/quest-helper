@@ -35,6 +35,7 @@ import com.questhelper.helpers.mischelpers.farmruns.FarmingUtils.TreeSapling;
 import com.questhelper.helpers.mischelpers.farmruns.FarmingUtils.PayOrCut;
 import com.questhelper.helpers.mischelpers.farmruns.FarmingUtils.PayOrCompost;
 import com.questhelper.panel.PanelDetails;
+import com.questhelper.panel.TopLevelPanelDetails;
 import com.questhelper.questhelpers.ComplexStateQuestHelper;
 import com.questhelper.questinfo.HelperConfig;
 import com.questhelper.questinfo.QuestHelperQuest;
@@ -52,6 +53,7 @@ import com.questhelper.steps.widget.LunarSpells;
 import com.questhelper.steps.widget.NormalSpells;
 import java.util.Set;
 
+import com.questhelper.steps.widget.WidgetHighlight;
 import net.runelite.api.QuestState;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
@@ -148,6 +150,8 @@ public class TreeRun extends ComplexStateQuestHelper
 	PatchStates gnomeStrongholdFruitStates, gnomeVillageStates, brimhavenStates, catherbyStates, lletyaStates, farmingGuildFruitStates;
 
 	PatchStates eastHardwoodStates, middleHardwoodStates, westHardwoodStates, savannahStates;
+
+	Requirement allGrowing;
 
 	ConditionalStep farmingGuildStep, lumbridgeStep, varrockStep, faladorStep, taverleyStep, strongholdStep, villageStep, lletyaStep,
 		catherbyStep, brimhavenStep, fossilIslandStep, savannahStep, nemusRetreatStep;
@@ -356,6 +360,17 @@ public class TreeRun extends ComplexStateQuestHelper
 		middleHardwoodStates = new PatchStates("Fossil Island", "Middle");
 		eastHardwoodStates = new PatchStates("Fossil Island", "East");
 		savannahStates = new PatchStates("Avium Savannah", accessToSavannah);
+
+		allGrowing = and(lumbridgeStates.getIsGrowing(), faladorStates.getIsGrowing(), taverleyStates.getIsGrowing(), varrockStates.getIsGrowing(),
+			gnomeStrongholdTreeStates.getIsGrowing(), catherbyStates.getIsGrowing(), brimhavenStates.getIsGrowing(), gnomeVillageStates.getIsGrowing(),
+			gnomeStrongholdFruitStates.getIsGrowing(),
+			or(not(accessToLletya), lletyaStates.getIsGrowing()),
+			or(not(accessToVarlamore), nemusRetreatStates.getIsGrowing()),
+			or(not(accessToFarmingGuildTreePatch), farmingGuildTreeStates.getIsGrowing()),
+			or(not(accessToFarmingGuildFruitTreePatch), farmingGuildFruitStates.getIsGrowing()),
+			or(not(accessToFossilIsland), and(westHardwoodStates.getIsGrowing(), middleHardwoodStates.getIsGrowing(), eastHardwoodStates.getIsGrowing())),
+			or(not(accessToSavannah), savannahStates.getIsGrowing())
+		);
 
 		payingForRemoval = new RuneliteRequirement(configManager, PAY_OR_CUT, PayOrCut.PAY.name());
 		payingForProtection = new RuneliteRequirement(configManager, PAY_OR_COMPOST, PayOrCompost.PAY.name());
@@ -619,65 +634,70 @@ public class TreeRun extends ComplexStateQuestHelper
 		nemusRetreatTreePatchClear.addSubSteps(nemusRetreatTreePatchDig, nemusRetreatTreeProtect);
 
 		// Fruit Tree Steps
+
+		// Fruit Tree Plant Steps
+		gnomeStrongholdFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_1, new WorldPoint(2476, 3446, 0),
+			"Plant your sapling in the Tree Gnome Stronghold patch.", fruitTreeSapling);
+		gnomeStrongholdFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
+
+		gnomeVillageFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_2, new WorldPoint(2490, 3180, 0),
+			"Plant your sapling in the Tree Gnome Village patch. Follow Elkoy to get out quickly.", fruitTreeSapling);
+		gnomeVillageFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
+
+		brimhavenFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_3, new WorldPoint(2765, 3213, 0),
+			"Plant your sapling in the Brimhaven patch.", fruitTreeSapling);
+		brimhavenFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
+
+		catherbyFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_4, new WorldPoint(2860, 3433, 0),
+			"Plant your sapling in the Catherby patch.", fruitTreeSapling);
+		catherbyFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
+
+		lletyaFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_5, new WorldPoint(2347, 3162, 0),
+			"Plant your sapling in the Lletya patch.", fruitTreeSapling);
+		lletyaFruitTreePatchPlant.conditionToHideInSidebar(new Conditions(LogicType.NOR, accessToLletya));
+		lletyaFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
+
+		farmingGuildFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_6, new WorldPoint(1242, 3758, 0),
+			"Plant your sapling in the Farming Guild patch.", fruitTreeSapling);
+		farmingGuildFruitTreePatchPlant.conditionToHideInSidebar(new Conditions(LogicType.NOR, accessToFarmingGuildFruitTreePatch));
+		farmingGuildFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
+
+		// Fruit Tree Check Health Steps
 		gnomeStrongholdFruitTreePatchCheckHealth = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_1, new WorldPoint(2476, 3446, 0),
 			"Check the health of the fruit tree planted in the Tree Gnome Stronghold.");
 		gnomeStrongholdFruitTreePatchCheckHealth.addWidgetHighlightWithTextRequirement(187, 3, "Gnome Stronghold", true);
+		gnomeStrongholdFruitTreePatchCheckHealth.addSubSteps(gnomeStrongholdFruitTreePatchPlant);
+
 		gnomeVillageFruitTreePatchCheckHealth = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_2, new WorldPoint(2490, 3180, 0),
 			"Check the health of the fruit tree planted outside the Tree Gnome Village. Follow Elkoy to get out quickly.");
 		gnomeVillageFruitTreePatchCheckHealth.addWidgetHighlightWithTextRequirement(187, 3, "Tree Gnome Village", true);
+		gnomeVillageFruitTreePatchCheckHealth.addSubSteps(gnomeVillageFruitTreePatchPlant);
+
 		brimhavenFruitTreePatchCheckHealth = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_3, new WorldPoint(2765, 3213, 0),
 			"Check the health of the fruit tree planted in Brimhaven.");
-		brimhavenFruitTreePatchCheckHealth.addWidgetHighlightWithTextRequirement(187, 3, "Brimhaven", true);
-		brimhavenFruitTreePatchCheckHealth.addWidgetHighlight(InterfaceID.SailingMenu.BRIMHAVEN_MARKER);
+		brimhavenFruitTreePatchCheckHealth.addWidgetHighlightWithTextRequirement(InterfaceID.MENU, InterfaceID.Menu.LJ_LAYER1 & 0xFFFF, "Brimhaven", true);
+		brimhavenFruitTreePatchCheckHealth.addWidgetHighlightWithTextRequirement(InterfaceID.CHARTERING_MENU_SIDE, InterfaceID.CharteringMenuSide.LIST_CONTENT & 0xFFFF, "Brimhaven", true);
+		brimhavenFruitTreePatchCheckHealth.addWidgetHighlight(new WidgetHighlight(InterfaceID.SAILING_MENU, InterfaceID.SailingMenu.CONTENT & 0xFFFF, 2));
+		brimhavenFruitTreePatchCheckHealth.addSubSteps(brimhavenFruitTreePatchPlant);
+
 		catherbyFruitTreePatchCheckHealth = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_4, new WorldPoint(2860, 3433, 0),
 			"Check the health of the fruit tree planted in Catherby.");
 		catherbyFruitTreePatchCheckHealth.addTeleport(catherbyTeleport);
 		catherbyFruitTreePatchCheckHealth.addSpellHighlight(NormalSpells.CAMELOT_TELEPORT);
 		catherbyFruitTreePatchCheckHealth.addSpellHighlight(LunarSpells.CATHERBY_TELEPORT);
+		catherbyFruitTreePatchCheckHealth.addSubSteps(catherbyFruitTreePatchPlant);
 
 		lletyaFruitTreePatchCheckHealth = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_5, new WorldPoint(2347, 3162, 0),
 			"Check the health of the fruit tree planted in Lletya.");
 		lletyaFruitTreePatchCheckHealth.conditionToHideInSidebar(new Conditions(LogicType.NOR, accessToLletya));
 		lletyaFruitTreePatchCheckHealth.addTeleport(crystalTeleport);
+		lletyaFruitTreePatchCheckHealth.addSubSteps(lletyaFruitTreePatchPlant);
 
 		farmingGuildFruitTreePatchCheckHealth = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_6, new WorldPoint(1242, 3758, 0),
 			"Check the health of the fruit tree planted in the Farming Guild.");
 		farmingGuildFruitTreePatchCheckHealth.conditionToHideInSidebar(new Conditions(LogicType.NOR, accessToFarmingGuildFruitTreePatch));
 		farmingGuildFruitTreePatchCheckHealth.addTeleport(farmingGuildTeleport);
 		farmingGuildFruitTreePatchCheckHealth.addWidgetHighlightWithTextRequirement(187, 3, "Farming Guild", true);
-
-		// Fruit Tree Plant Steps
-		gnomeStrongholdFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_1, new WorldPoint(2476, 3446, 0),
-			"Plant your sapling in the Tree Gnome Stronghold patch.", fruitTreeSapling);
-		gnomeStrongholdFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
-		gnomeStrongholdTreePatchCheckHealth.addSubSteps(gnomeStrongholdTreePatchPlant);
-
-		gnomeVillageFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_2, new WorldPoint(2490, 3180, 0),
-			"Plant your sapling in the Tree Gnome Village patch. Follow Elkoy to get out quickly.", fruitTreeSapling);
-		gnomeVillageFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
-		gnomeVillageFruitTreePatchCheckHealth.addSubSteps(gnomeVillageFruitTreePatchPlant);
-
-		brimhavenFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_3, new WorldPoint(2765, 3213, 0),
-			"Plant your sapling in the Brimhaven patch.", fruitTreeSapling);
-		brimhavenFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
-		brimhavenFruitTreePatchCheckHealth.addSubSteps(brimhavenFruitTreePatchPlant);
-
-		// Plant
-		catherbyFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_4, new WorldPoint(2860, 3433, 0),
-			"Plant your sapling in the Catherby patch.", fruitTreeSapling);
-		catherbyFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
-		catherbyFruitTreePatchCheckHealth.addSubSteps(catherbyFruitTreePatchPlant);
-
-		lletyaFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_5, new WorldPoint(2347, 3162, 0),
-			"Plant your sapling in the Lletya patch.", fruitTreeSapling);
-		lletyaFruitTreePatchPlant.conditionToHideInSidebar(new Conditions(LogicType.NOR, accessToLletya));
-		lletyaFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
-		lletyaFruitTreePatchCheckHealth.addSubSteps(lletyaFruitTreePatchPlant);
-
-		farmingGuildFruitTreePatchPlant = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_6, new WorldPoint(1242, 3758, 0),
-			"Plant your sapling in the Farming Guild patch.", fruitTreeSapling);
-		farmingGuildFruitTreePatchPlant.conditionToHideInSidebar(new Conditions(LogicType.NOR, accessToFarmingGuildFruitTreePatch));
-		farmingGuildFruitTreePatchPlant.addIcon(fruitTreeSapling.getId());
 		farmingGuildFruitTreePatchCheckHealth.addSubSteps(farmingGuildFruitTreePatchPlant);
 
 		// Clear
@@ -689,6 +709,9 @@ public class TreeRun extends ComplexStateQuestHelper
 		gnomeVillageFruitTreePatchClear.addDialogSteps("Would you chop my tree down for me?","I can't be bothered - I'd rather pay you to do it.", "Here's 200 Coins - chop my tree down please.", "Yes.");
 		brimhavenFruitTreePatchClear = new NpcStep(this, NpcID.GARTH, new WorldPoint(2765, 3213, 0),
 			"Pay Garth 200 coins to clear the fruit tree, or pick all the fruit and cut it down.");
+		brimhavenFruitTreePatchClear.addWidgetHighlightWithTextRequirement(InterfaceID.MENU, InterfaceID.Menu.LJ_LAYER1 & 0xFFFF, "Brimhaven", true);
+		brimhavenFruitTreePatchClear.addWidgetHighlightWithTextRequirement(InterfaceID.CHARTERING_MENU_SIDE, InterfaceID.CharteringMenuSide.LIST_CONTENT & 0xFFFF, "Brimhaven", true);
+		brimhavenFruitTreePatchClear.addWidgetHighlight(new WidgetHighlight(InterfaceID.SAILING_MENU, InterfaceID.SailingMenu.CONTENT & 0xFFFF, 2));
 		brimhavenFruitTreePatchClear.addDialogSteps("Would you chop my tree down for me?","I can't be bothered - I'd rather pay you to do it.", "Here's 200 Coins - chop my tree down please.", "Yes.");
 		catherbyFruitTreePatchClear = new NpcStep(this, NpcID.FARMING_GARDENER_FRUIT_4, new WorldPoint(2860, 3433, 0),
 			"Pay Ellena 200 coins to clear the fruit tree, or pick all the fruit and cut it down.");
@@ -721,7 +744,7 @@ public class TreeRun extends ComplexStateQuestHelper
 		guildFruitProtect.addDialogSteps("Would you chop my tree down for me?", "I can't be bothered - I'd rather pay you to do it.", "Here's 200 Coins - " +
 				"chop my tree down please.", "Yes.");
 
-			// Dig Fruit Tree Steps
+		// Dig Fruit Tree Steps
 		gnomeStrongholdFruitTreePatchDig = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_1, new WorldPoint(2476, 3446, 0),
 			"Dig up the fruit tree's stump in the Tree Gnome Stronghold.");
 		gnomeVillageFruitTreePatchDig = new ObjectStep(this, ObjectID.FARMING_FRUIT_TREE_PATCH_2, new WorldPoint(2490, 3180, 0),
@@ -933,61 +956,56 @@ public class TreeRun extends ComplexStateQuestHelper
 	{
 		// IDEA: Can add ID to each step. onLoad and onConfigChanged it checks id ordering.
 		List<PanelDetails> allSteps = new ArrayList<>();
+
+		allSteps.add(new PanelDetails("Wait for Herbs", waitForTree).withHideCondition(nor(allGrowing)));
+
 		PanelDetails farmingGuildPanel = new PanelDetails("Farming Guild", Arrays.asList(farmingGuildTreePatchCheckHealth, farmingGuildTreePatchClear,
 				farmingGuildFruitTreePatchCheckHealth, farmingGuildFruitTreePatchClear)).withId(0);
 		farmingGuildPanel.setLockingStep(farmingGuildStep);
-		allSteps.add(farmingGuildPanel);
 
 		PanelDetails lumbridgePanel = new PanelDetails("Lumbridge", Arrays.asList(lumbridgeTreePatchCheckHealth, lumbridgeTreePatchClear)).withId(1);
 		lumbridgePanel.setLockingStep(lumbridgeStep);
-		allSteps.add(lumbridgePanel);
 
 		PanelDetails faladorPanel = new PanelDetails("Falador", Arrays.asList(faladorTreePatchCheckHealth, faladorTreePatchClear)).withId(2);
 		faladorPanel.setLockingStep(faladorStep);
-		allSteps.add(faladorPanel);
+
 		PanelDetails taverleyPanel = new PanelDetails("Taverley", Arrays.asList(taverleyTreePatchCheckHealth, taverleyTreePatchClear)).withId(3);
 		taverleyPanel.setLockingStep(taverleyStep);
-		allSteps.add(taverleyPanel);
 
 		PanelDetails varrockPanel = new PanelDetails("Varrock", Arrays.asList(varrockTreePatchCheckHealth, varrockTreePatchClear)).withId(4);
 		varrockPanel.setLockingStep(varrockStep);
-		allSteps.add(varrockPanel);
 
 		PanelDetails gnomeStrongholdPanel = new PanelDetails("Gnome Stronghold", Arrays.asList(gnomeStrongholdFruitTreePatchCheckHealth, gnomeVillageFruitTreePatchClear,
 			gnomeStrongholdTreePatchCheckHealth, gnomeStrongholdTreePatchClear)).withId(5);
 		gnomeStrongholdPanel.setLockingStep(strongholdStep);
-		allSteps.add(gnomeStrongholdPanel);
 
 		PanelDetails villagePanel = new PanelDetails("Tree Gnome Village", Arrays.asList(gnomeVillageFruitTreePatchCheckHealth,
 				gnomeVillageFruitTreePatchClear)).withId(6);
 		villagePanel.setLockingStep(villageStep);
-		allSteps.add(villagePanel);
 
 		PanelDetails catherbyPanel = new PanelDetails("Catherby", Arrays.asList(catherbyFruitTreePatchCheckHealth, catherbyFruitTreePatchClear)).withId(7);
 		catherbyPanel.setLockingStep(catherbyStep);
-		allSteps.add(catherbyPanel);
 
 		PanelDetails brimhavenPanel = new PanelDetails("Brimhaven", Arrays.asList(brimhavenFruitTreePatchCheckHealth, brimhavenFruitTreePatchClear)).withId(8);
 		brimhavenPanel.setLockingStep(brimhavenStep);
-		allSteps.add(brimhavenPanel);
 
-		PanelDetails lletyaPanel = new PanelDetails("Llyeta", Arrays.asList(lletyaFruitTreePatchCheckHealth, lletyaFruitTreePatchClear)).withId(9);
+		PanelDetails lletyaPanel = new PanelDetails("Lletya", Arrays.asList(lletyaFruitTreePatchCheckHealth, lletyaFruitTreePatchClear)).withId(9);
 		lletyaPanel.setLockingStep(lletyaStep);
-		allSteps.add(lletyaPanel);
 
 		PanelDetails fossilIslandPanel = new PanelDetails("Fossil Island", Arrays.asList(eastHardwoodTreePatchCheckHealth, eastHardwoodTreePatchClear,
 			middleHardwoodTreePatchCheckHealth, middleHardwoodTreePatchClear,
 			westHardwoodTreePatchCheckHealth, westHardwoodTreePatchClear)).withId(10);
 		fossilIslandPanel.setLockingStep(fossilIslandStep);
-		allSteps.add(fossilIslandPanel);
 
 		PanelDetails savannahPanel = new PanelDetails("Avium Savannah", Arrays.asList(savannahCheckHealth, savannahClear, savannahPlant)).withId(11);
 		savannahPanel.setLockingStep(savannahStep);
-		allSteps.add(savannahPanel);
 
 		PanelDetails nemusRetreatPanel = new PanelDetails("Nemus Retreat", Arrays.asList(nemusRetreatTreePatchCheckHealth, nemusRetreatTreePatchClear, nemusRetreatTreePatchPlant)).withId(12);
 		nemusRetreatPanel.setLockingStep(nemusRetreatStep);
-		allSteps.add(nemusRetreatPanel);
+
+		TopLevelPanelDetails farmRunSidebar = new TopLevelPanelDetails("Tree Run", farmingGuildPanel, lumbridgePanel, faladorPanel, taverleyPanel,
+			varrockPanel, gnomeStrongholdPanel, villagePanel, catherbyPanel, brimhavenPanel, lletyaPanel, fossilIslandPanel, savannahPanel, nemusRetreatPanel);
+		allSteps.add(farmRunSidebar);
 
 		return allSteps;
 	}

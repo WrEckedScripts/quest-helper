@@ -176,8 +176,8 @@ public class TheDigSite extends BasicQuestHelper
 		steps.put(7, explodeWall);
 
 		ConditionalStep completeQuest = new ConditionalStep(this, goDownForTablet);
-		completeQuest.addStep(new Conditions(tablet.alsoCheckBank(questBank), inUndergroundTemple2), goUpWithTablet);
-		completeQuest.addStep(new Conditions(tablet.alsoCheckBank(questBank)), useTabletOnExpert);
+		completeQuest.addStep(new Conditions(tablet.alsoCheckBank(), inUndergroundTemple2), goUpWithTablet);
+		completeQuest.addStep(new Conditions(tablet.alsoCheckBank()), useTabletOnExpert);
 		completeQuest.addStep(inUndergroundTemple2, takeTablet);
 		steps.put(8, completeQuest);
 
@@ -437,7 +437,7 @@ public class TheDigSite extends BasicQuestHelper
 		digForTalisman = new ObjectStep(this, ObjectID.DIGDUGUPSOIL2, new WorldPoint(3374, 3438, 0), "Dig in the north east dig spot in the Digsite until you get a talisman.",
 			trowelHighlighted, specimenJar, specimenBrush);
 		digForTalisman.addIcon(ItemID.TROWEL);
-		talkToExpert = new NpcStep(this, NpcID.ARCHAEOLOGICAL_EXPERT, new WorldPoint(3357, 3334, 0), "Talk Archaeological expert in the Exam Centre.", talisman);
+		talkToExpert = new NpcStep(this, NpcID.ARCHAEOLOGICAL_EXPERT, new WorldPoint(3357, 3334, 0), "Talk to the Archaeological expert in the Exam Centre.", talisman);
 
 		useInvitationOnWorkman = new NpcStep(this, NpcID.DIGWORKMAN1, new WorldPoint(3360, 3415, 0), "Use the invitation on any workman.", true, invitation);
 		useInvitationOnWorkman.addIcon(ItemID.DIGEXPERTSCROLL);

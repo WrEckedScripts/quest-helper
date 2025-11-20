@@ -181,16 +181,16 @@ public class WhileGuthixSleeps extends BasicQuestHelper
 		steps.put(4, goGetBroav);
 
 		ConditionalStep goTrapBroav = new ConditionalStep(this, setupTrap);
-		goTrapBroav.addStep(unconsciousBroav.alsoCheckBank(questBank), returnBroavToHuntingExpert);
+		goTrapBroav.addStep(unconsciousBroav.alsoCheckBank(), returnBroavToHuntingExpert);
 		goTrapBroav.addStep(broavTrapped, retrieveBroav);
 		goTrapBroav.addStep(trapBaited, waitForBroavToGetTrapped);
 		goTrapBroav.addStep(trapSetUp, useFungusOnTrap);
 		steps.put(5, goTrapBroav);
 
 		ConditionalStep goTrackMovario = new ConditionalStep(this, goTrapBroav);
-		goTrackMovario.addStep(and(broavNearby, dirtyShirt.alsoCheckBank(questBank), isNearTable), useDirtyShirtOnBroav);
-		goTrackMovario.addStep(and(hasBroav, dirtyShirt.alsoCheckBank(questBank), isNearTable), dropBroav);
-		goTrackMovario.addStep(and(hasBroav, dirtyShirt.alsoCheckBank(questBank)), goToBrokenTable);
+		goTrackMovario.addStep(and(broavNearby, dirtyShirt.alsoCheckBank(), isNearTable), useDirtyShirtOnBroav);
+		goTrackMovario.addStep(and(hasBroav, dirtyShirt.alsoCheckBank(), isNearTable), dropBroav);
+		goTrackMovario.addStep(and(hasBroav, dirtyShirt.alsoCheckBank()), goToBrokenTable);
 		goTrackMovario.addStep(hasBroav, talkToLaunderer);
 		steps.put(6, goTrackMovario);
 		steps.put(7, goTrackMovario);
@@ -720,8 +720,8 @@ public class WhileGuthixSleeps extends BasicQuestHelper
 		broav = new ItemRequirement("Broav", ItemID.WGS_BROAV);
 		movariosNotesV1 = new ItemRequirement("Movario's notes (volume 1)", ItemID.WGS_RESEARCHNOTES_1);
 		movariosNotesV2 = new ItemRequirement("Movario's notes (volume 2)", ItemID.WGS_RESEARCHNOTES_2);
-		movariosNotesV1InBank = new ItemRequirement("Movario's notes (volume 1)", ItemID.WGS_RESEARCHNOTES_1).alsoCheckBank(questBank);
-		movariosNotesV2InBank = new ItemRequirement("Movario's notes (volume 2)", ItemID.WGS_RESEARCHNOTES_2).alsoCheckBank(questBank);
+		movariosNotesV1InBank = new ItemRequirement("Movario's notes (volume 1)", ItemID.WGS_RESEARCHNOTES_1).alsoCheckBank();
+		movariosNotesV2InBank = new ItemRequirement("Movario's notes (volume 2)", ItemID.WGS_RESEARCHNOTES_2).alsoCheckBank();
 		wastePaperBasket = new ItemRequirement("Waste-paper basket", ItemID.WGS_WASTEPAPERBASKET_INV);
 		rubyKey = new ItemRequirement("Ruby key", ItemID.WGS_KEY_RUBY);
 		teleorb = new ItemRequirement("Teleorb", ItemID.WGS_COM_TELE_ORB);
@@ -782,8 +782,8 @@ public class WhileGuthixSleeps extends BasicQuestHelper
 		trapSetUp = new VarbitRequirement(VarbitID.WGS_PIT_TRAP_BROAV, 1);
 		trapBaited = new VarbitRequirement(VarbitID.WGS_PIT_TRAP_BROAV, 2, Operation.GREATER_EQUAL);
 		broavTrapped = new VarbitRequirement(VarbitID.WGS_PIT_TRAP_BROAV, 4);
-		broavNearby = new VarplayerRequirement(VarPlayerID.FOLLOWER_NPC, List.of(NpcID.WGS_BROAV, 13516), 16);
-		hasBroav = or(broavNearby, broav.alsoCheckBank(questBank));
+		broavNearby = new VarplayerRequirement(VarPlayerID.FOLLOWER_NPC, List.of(NpcID.WGS_BROAV, NpcID.WGS_WASHERMAN), 16);
+		hasBroav = or(broavNearby, broav.alsoCheckBank());
 
 		nearTable = new Zone(new WorldPoint(2516, 3246, 0), new WorldPoint(2522, 3252, 0));
 		isNearTable = new ZoneRequirement(nearTable);
@@ -919,7 +919,7 @@ public class WhileGuthixSleeps extends BasicQuestHelper
 		// 10780 2->3 represents state of Silif
 		givenArmourToSilif = new VarbitRequirement(VarbitID.WGS, 550, Operation.GREATER_EQUAL);
 
-		silifIsFollowing = new VarplayerRequirement(VarPlayerID.FOLLOWER_NPC, 13522, 16);
+		silifIsFollowing = new VarplayerRequirement(VarPlayerID.FOLLOWER_NPC, NpcID.WGS_SILIF_FOLLOWER_ARMOUR, 16);
 		seenMap = new VarbitRequirement(VarbitID.WGS, 580, Operation.GREATER_EQUAL);
 
 		squallFightRoom = new Zone(new WorldPoint(4126, 4840, 2), new WorldPoint(4151, 4861, 2));
@@ -1037,7 +1037,7 @@ public class WhileGuthixSleeps extends BasicQuestHelper
 		// 3->4 told to go to hunter expert
 
 		talkToHuntingExpert = new NpcStep(this, NpcID.HUNTING_JUNGLE_INFORMATION, new WorldPoint(2525, 2916, 0),
-			"Talk to the Hunting Expert in his hut in the middle of the Feldip Hills hunting area.", knife, logs);
+			"Talk to the Hunting Expert in her hut in the middle of the Feldip Hills hunting area.", knife, logs);
 		talkToHuntingExpert.addTeleport(feldipHillsTeleport);
 		talkToHuntingExpert.addDialogSteps("Do you think you could help me with broavs?", "A creature to help track down a person.");
 
@@ -1063,7 +1063,6 @@ public class WhileGuthixSleeps extends BasicQuestHelper
 
 		enterMovarioBase = new ObjectStep(this, ObjectID.WGS_BF_TABLE_BROKEN2_OPEN, new WorldPoint(2519, 3249, 0), "Enter Movario's base under the broken table in the Khazard Battlefield.");
 
-		// TODO: Update hardcoded 54117 to CHEST_54117
 		claimRunes = new ObjectStep(this, ObjectID.WGS_MOVARIO_RUNE_CHEST, new WorldPoint(4124, 4984, 0), "Search the open chest in the far north of the area for some runes.");
 
 		// 4066 122878 -> 385022
@@ -1312,13 +1311,13 @@ public class WhileGuthixSleeps extends BasicQuestHelper
 
 		talkToAkrisaeAfterRecruitment = new NpcStep(this, NpcID.WGS_AKRISAE, new WorldPoint(2989, 3342, 0),
 			"Return to Akrisae in the White Knights' Castle, on the ground floor on the east side.", normalSpellbook, emptySlots9,
-			ironChainbody.equipped().hideConditioned(squallOutfit.alsoCheckBank(questBank)), bronzeMedHelm.equipped().hideConditioned(squallOutfit.alsoCheckBank(questBank)),
-			squallOutfit.equipped().showConditioned(squallOutfit.alsoCheckBank(questBank)), unpoweredOrb.hideConditioned(hasCastChargeOrb), chargeOrbSpell.hideConditioned(hasCastChargeOrb));
+			ironChainbody.equipped().hideConditioned(squallOutfit.alsoCheckBank()), bronzeMedHelm.equipped().hideConditioned(squallOutfit.alsoCheckBank()),
+			squallOutfit.equipped().showConditioned(squallOutfit.alsoCheckBank()), unpoweredOrb.hideConditioned(hasCastChargeOrb), chargeOrbSpell.hideConditioned(hasCastChargeOrb));
 		// 10838 0->1
 		// 10826 0->1
 		enterBlackKnightFortress = new ObjectStep(this, ObjectID.BKFORTRESSDOOR1, new WorldPoint(3016, 3514, 0), "Enter the Black Knights' Fortress. Akrisae will give you a one-off teleport there.",
-			normalSpellbook, emptySlots9, ironChainbody.equipped().hideConditioned(squallOutfit.alsoCheckBank(questBank)), bronzeMedHelm.equipped().hideConditioned(squallOutfit.alsoCheckBank(questBank)),
-			squallOutfit.equipped().showConditioned(squallOutfit.alsoCheckBank(questBank)), unpoweredOrb.hideConditioned(hasCastChargeOrb), chargeOrbSpell.hideConditioned(hasCastChargeOrb));
+			normalSpellbook, emptySlots9, ironChainbody.equipped().hideConditioned(squallOutfit.alsoCheckBank()), bronzeMedHelm.equipped().hideConditioned(squallOutfit.alsoCheckBank()),
+			squallOutfit.equipped().showConditioned(squallOutfit.alsoCheckBank()), unpoweredOrb.hideConditioned(hasCastChargeOrb), chargeOrbSpell.hideConditioned(hasCastChargeOrb));
 		// 10962 0->1 when teleported
 		enterBlackKnightFortress.addDialogStep("Yes.");
 		pushHiddenWall = new ObjectStep(this, ObjectID.BKSECRETDOOR, new WorldPoint(3016, 3517, 0), "Push the wall to enter a secret room.");

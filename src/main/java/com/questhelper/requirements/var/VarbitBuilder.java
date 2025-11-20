@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Zoinkwiz
+ * Copyright (c) 2025, pajlada <https://github.com/pajlada>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,18 +22,32 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.questhelper.questinfo;
+package com.questhelper.requirements.var;
 
-import lombok.Getter;
+import com.questhelper.requirements.util.Operation;
 
-public enum PlayerQuests
+/// VarbitBuilder can be used to build VarbitRequirements in case your
+/// quest needs to refer to multiple states of the same varbit.
+public class VarbitBuilder
 {
-	BIKE_SHEDDER("bike_shedder");
+	/// The Varbit ID
+	private final int id;
 
-	@Getter
-	private final String configValue;
-	PlayerQuests(String configValue)
+	/// Create a VarbitBuilder for the given Varbit ID `id`.
+	public VarbitBuilder(int id)
 	{
-		this.configValue = configValue;
+		this.id = id;
+	}
+
+	/// Returns a VarbitRequirement with the EQUALS operator for the given value.
+	public VarbitRequirement eq(int value)
+	{
+		return new VarbitRequirement(id, value);
+	}
+
+	/// Returns a VarbitRequirement with the GREATER_EQUAL (>=) operator for the given value.
+	public VarbitRequirement ge(int value)
+	{
+		return new VarbitRequirement(id, value, Operation.GREATER_EQUAL);
 	}
 }
